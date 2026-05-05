@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Getrude Preko — Data Analyst</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #090f0f;
+    --surface: #101818;
+    --surface2: #172020;
+    --accent: #40e0d0;
+    --accent2: #2cc9e0;
+    --muted: #2a4a4a;
+    --text: #e0edec;
+    --text2: #6a9898;
+    --border: #1a2e2e;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── GRID NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(184,240,110,0.04) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(110,240,168,0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.4rem 4rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(12,15,10,0.85);
+    backdrop-filter: blur(16px);
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text2);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 10rem 4rem 6rem;
+    position: relative;
+    gap: 4rem;
+  }
+
+  .hero-left {}
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(3.2rem, 6vw, 5.5rem);
+    line-height: 1.05;
+    margin-bottom: 1.75rem;
+    font-weight: 400;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-desc {
+    font-size: 1.05rem;
+    color: var(--text2);
+    max-width: 38ch;
+    margin-bottom: 2.5rem;
+    line-height: 1.75;
+  }
+
+  .btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.85rem 2rem;
+    border-radius: 2px;
+    text-decoration: none;
+    transition: all 0.25s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 500;
+  }
+  .btn-primary:hover {
+    background: #7af0e8;
+    transform: translateY(-2px);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--muted);
+  }
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* ── HERO RIGHT: STATS PANEL ── */
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    align-self: center;
+    animation: fadeUp 1s ease 0.3s both;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    padding: 2rem 1.75rem;
+    transition: background 0.2s;
+  }
+  .stat-card:hover { background: var(--surface2); }
+
+  .stat-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3rem;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 0.35rem;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text2);
+  }
+
+  /* ── SECTION COMMON ── */
+  section { position: relative; z-index: 1; }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 6rem 4rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 400;
+    line-height: 1.15;
+  }
+
+  .divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── SKILLS ── */
+  #skills { border-top: 1px solid var(--border); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .skill-item {
+    background: var(--surface);
+    padding: 1.5rem 1.75rem;
+    transition: background 0.2s;
+  }
+  .skill-item:hover { background: var(--surface2); }
+
+  .skill-name {
+    font-size: 0.92rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .skill-bar {
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.4rem;
+  }
+
+  .skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transform-origin: left;
+    animation: barGrow 1.2s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .skill-level {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text2);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── PROJECTS ── */
+  #projects { border-top: 1px solid var(--border); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 2rem;
+    position: relative;
+    transition: border-color 0.25s, transform 0.25s;
+    overflow: hidden;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .project-card:hover { border-color: var(--muted); transform: translateY(-3px); }
+  .project-card:hover::before { transform: scaleX(1); }
+
+  .project-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .project-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+    line-height: 1.25;
+  }
+
+  .project-desc {
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .project-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tool-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: var(--text2);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+  }
+
+  /* ── EXPERIENCE ── */
+  #experience { border-top: 1px solid var(--border); }
+
+  .timeline { position: relative; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    padding-left: 3rem;
+    padding-bottom: 3.5rem;
+    position: relative;
+  }
+
+  .timeline-item:last-child { padding-bottom: 0; }
+
+  .timeline-dot {
+    position: absolute;
+    left: -4px;
+    top: 0.4rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--bg);
+  }
+
+  .timeline-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--text2);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .timeline-role {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    margin-bottom: 0.2rem;
+  }
+
+  .timeline-company {
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .timeline-desc {
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.7;
+    max-width: 65ch;
+  }
+
+  /* ── CONTACT ── */
+  #contact { border-top: 1px solid var(--border); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .contact-headline {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-headline em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .contact-text {
+    font-size: 0.92rem;
+    color: var(--text2);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+  }
+
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: var(--text2);
+    font-size: 0.9rem;
+    transition: color 0.2s;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .contact-link:hover { color: var(--accent); }
+
+  .contact-link-icon {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    min-width: 5rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes barGrow {
+    from { width: 0; }
+    to   { width: var(--w); }
+  }
+
+  .fade-up { animation: fadeUp 0.9s cubic-bezier(0.16,1,0.3,1) both; }
+
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.35s; }
+  .delay-4 { animation-delay: 0.5s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { gap: 1.5rem; }
+    #hero { grid-template-columns: 1fr; padding: 8rem 1.5rem 4rem; gap: 3rem; }
+    .hero-stats { grid-template-columns: 1fr 1fr; }
+    .section-inner { padding: 4rem 1.5rem; }
+    .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.75rem; text-align: center; }
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .projects-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Getrude Preko</div>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-tag fade-up">Available for work · Remote / Hybrid, UK</div>
+    <h1 class="fade-up delay-1">
+      Turning raw data<br>into <em>clear decisions</em>
+    </h1>
+    <p class="hero-desc fade-up delay-2">
+      I'm Getrude Preko — a data analyst with hands on experience turning messy datasets into dashboards, models, and stories that drive meaningful outcomes.
+    </p>
+    <div class="btn-group fade-up delay-3">
+      <a href="#projects" class="btn btn-primary">View my work</a>
+      <a href="#contact" class="btn btn-outline">Get in touch</a>
+    </div>
+  </div>
+
+<!-- stats summary - to be looked at -->
+  <!-- <div class="hero-stats">
+    <div class="stat-card">
+      <div class="stat-number">5+</div>
+      <div class="stat-label">Years Experience</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">40+</div>
+      <div class="stat-label">Projects Delivered</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">12</div>
+      <div class="stat-label">Tools Mastered</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">3</div>
+      <div class="stat-label">Industries Covered</div>
+    </div>
+  </div> -->
+
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Skills & Tools</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-item">
+        <div class="skill-name">Python</div>
+        <div class="skill-bar"><div class="skill-fill" style="--w:92%;width:92%"></div></div>
+        <div class="skill-level">Working proficiency</div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">SQL</div>
+        <div class="skill-bar"><div class="skill-fill" style="--w:95%;width:95%"></div></div>
+        <div class="skill-level">Working proficiency</div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Tableau</div>
+        <div class="skill-bar"><div class="skill-fill" style="--w:88%;width:88%"></div></div>
+        <div class="skill-level">Working proficiency</div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Power BI</div>
+        <div class="skill-bar"><div class="skill-fill" style="--w:80%;width:80%"></div></div>
+        <div class="skill-level">Working proficiency</div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Streamlit</div>
+        <div class="skill-bar"><div class="skill-fill" style="--w:72%;width:72%"></div></div>
+        <div class="skill-level">Working proficiency</div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">dbt</div>
+        <div class="skill-bar"><div class="skill-fill" style="--w:75%;width:75%"></div></div>
+        <div class="skill-level">Basic Knowledge</div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">Pandas / NumPy</div>
+        <div class="skill-bar"><div class="skill-fill" style="--w:94%;width:94%"></div></div>
+        <div class="skill-level">Working proficiency</div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-name">BigQuery / Snowflake</div>
+        <div class="skill-bar"><div class="skill-fill" style="--w:82%;width:82%"></div></div>
+        <div class="skill-level">Basic Knowledge</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Selected Projects</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-tag">Retail Analytics</div>
+        <div class="project-title">Customer Churn Prediction Model</div>
+        <p class="project-desc">Built an end-to-end churn prediction pipeline for a 200K-customer retail brand. Achieved 87% recall, enabling proactive retention campaigns that reduced churn by 19%.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Python</span>
+          <span class="tool-tag">XGBoost</span>
+          <span class="tool-tag">BigQuery</span>
+          <span class="tool-tag">Tableau</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Finance</div>
+        <div class="project-title">Executive KPI Dashboard Suite</div>
+        <p class="project-desc">Designed a real-time Tableau dashboard suite consolidating data from 6 sources, replacing 14 hours/week of manual reporting and serving 35 stakeholders daily.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Tableau</span>
+          <span class="tool-tag">SQL</span>
+          <span class="tool-tag">dbt</span>
+          <span class="tool-tag">Snowflake</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Healthcare</div>
+        <div class="project-title">Patient Wait-Time Optimisation</div>
+        <p class="project-desc">Analysed appointment and staffing data for an NHS trust to identify bottlenecks. Recommendations reduced average wait time by 23 minutes across 4 outpatient departments.</p>
+        <div class="project-tools">
+          <span class="tool-tag">R</span>
+          <span class="tool-tag">ggplot2</span>
+          <span class="tool-tag">PostgreSQL</span>
+          <span class="tool-tag">Power BI</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">E-commerce</div>
+        <div class="project-title">A/B Test Analysis Framework</div>
+        <p class="project-desc">Standardised experimentation analysis across a £50M e-commerce platform, implementing Bayesian A/B testing to improve decision-making speed by 3×.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Python</span>
+          <span class="tool-tag">SciPy</span>
+          <span class="tool-tag">Pandas</span>
+          <span class="tool-tag">Looker</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Marketing</div>
+        <div class="project-title">Multi-Touch Attribution Model</div>
+        <p class="project-desc">Replaced last-click attribution with a data-driven Markov chain model across 8 digital channels, revealing that 34% of budget was misallocated.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Python</span>
+          <span class="tool-tag">GA4</span>
+          <span class="tool-tag">BigQuery</span>
+          <span class="tool-tag">Tableau</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-tag">Supply Chain</div>
+        <div class="project-title">Inventory Demand Forecasting</div>
+        <p class="project-desc">Built a time-series forecasting system using Prophet and SARIMA, reducing overstock costs by £2.1M annually across a 3,000 SKU catalogue.</p>
+        <div class="project-tools">
+          <span class="tool-tag">Python</span>
+          <span class="tool-tag">Prophet</span>
+          <span class="tool-tag">SQL</span>
+          <span class="tool-tag">Power BI</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Experience</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2022 — Present</div>
+        <div class="timeline-role">Senior Data Analyst</div>
+        <div class="timeline-company">Fieldstone Analytics, Edinburgh</div>
+        <p class="timeline-desc">Leading analytics for three client verticals (retail, finance, healthcare). Mentoring two junior analysts, setting data quality standards, and owning the end-to-end delivery of insight products for C-suite stakeholders.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2020 — 2022</div>
+        <div class="timeline-role">Data Analyst</div>
+        <div class="timeline-company">Greystone Commerce, Glasgow</div>
+        <p class="timeline-desc">Owned the analytics function for a £50M e-commerce platform. Built the company's first self-serve BI environment and migrated reporting from Excel to Tableau, saving 20+ hours per week across the team.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2018 — 2020</div>
+        <div class="timeline-role">Junior Data Analyst</div>
+        <div class="timeline-company">Meridian Digital, London</div>
+        <p class="timeline-desc">Supported campaign performance reporting and audience segmentation for a digital marketing agency. Developed proficiency in SQL, Python, and Google Analytics across 15+ client accounts.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-date">2014 — 2018</div>
+        <div class="timeline-role">BSc Mathematics & Statistics</div>
+        <div class="timeline-company">University of Edinburgh</div>
+        <p class="timeline-desc">First Class Honours. Dissertation on time-series anomaly detection in financial markets. Relevant coursework in probability, linear models, and computational statistics.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Get in Touch</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="contact-grid">
+      <div>
+        <p class="contact-headline">Let's work on something <em>interesting</em></p>
+        <p class="contact-text">Whether you need analytical horsepower for a project, a dashboard that actually gets used, or just want to talk data, my inbox is open.</p>
+        <a href="mailto:alex@example.com" class="btn btn-primary">Say hello →</a>
+      </div>
+
+      <div class="contact-links">
+        <a href="mailto:getrudepreko@gmail.com" class="contact-link">
+          <span class="contact-link-icon">Email</span>
+          getrudepreko@gmail.com
+        </a>
+        <a href="#" class="contact-link">
+          <span class="contact-link-icon">LinkedIn</span>
+          www.linkedin.com/in/getrude-owusuaa-preko/
+        </a>
+        <a href="#" class="contact-link">
+          <span class="contact-link-icon">GitHub</span>
+          github.com/getrude0611
+        </a>
+        <a href="#" class="contact-link">
+          <span class="contact-link-icon">Location</span>
+          Glasgow, Scotland
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Getrude Preko</span>
+  <span>The Data Analyst</span>
+</footer>
+
+</body>
+</html>
